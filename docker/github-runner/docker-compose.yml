@@ -5,7 +5,7 @@ services:
     restart: always
     environment:
       - REPO_URL=https://github.com/hungtx3322/crm-m.git
-      - ACCESS_TOKEN=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
+      - ACCESS_TOKEN=
       - RUNNER_NAME=ubuntu-server-runner
       - RUNNER_WORKDIR=/tmp/github-runner
       - DOCKER_HOST=unix:///var/run/docker.sock
