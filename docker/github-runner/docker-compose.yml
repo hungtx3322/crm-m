@@ -1,0 +1,16 @@
+services:
+  github-runner:
+    image: myoung34/github-runner:latest
+    container_name: central-github-runner
+    restart: always
+    environment:
+      - REPO_URL=https://github.com/hungtx3322/crm-m.git
+      - ACCESS_TOKEN=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
+      - RUNNER_NAME=ubuntu-server-runner
+      - RUNNER_WORKDIR=/tmp/github-runner
+      - DOCKER_HOST=unix:///var/run/docker.sock
+      # Xử lý dọn dẹp sau khi chạy xong job để tránh đầy ổ cứng
+      - EPHEMERAL=false 
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/github-runner:/tmp/github-runner

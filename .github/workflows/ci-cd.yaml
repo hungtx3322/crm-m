@@ -1,0 +1,36 @@
+name: crm-manh
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  test-and-deploy:
+    runs-on: self-hosted
+    steps:
+      - name: 1. Checkout Code
+        uses: actions/checkout@v4
+
+      - name: 2. Build New Image
+        # Bước này tạo ra image mới nhưng chưa áp dụng vào container đang chạy
+        run: |
+          docker build -t my-odoo-image:latest -f docker/odoo/Dockerfile .
+
+      - name: 3. Run Syntax & Basic Test
+        # Chạy một container tạm thời để test. Nếu lệnh này trả về lỗi (exit 1), 
+        # GitHub Actions sẽ NGỪNG TOÀN BỘ workflow tại đây.
+        run: |
+          docker run --rm my-odoo-image:latest \
+          odoo --stop-after-init --db_host=db_non_existent || exit 1
+          # Lưu ý: Bạn có thể thay bằng các lệnh test chuyên sâu của Odoo
+
+      - name: 4. Deploy Update
+        # Chỉ khi các bước trên thành công, bước này mới chạy.
+        # Chúng ta dùng docker-compose trực tiếp tại thư mục dự án trên server.
+        working-directory: /home/ubuntu/odoo-project # Đường dẫn thật trên server
+        run: |
+          docker compose up -d --build odoo
+          
+      - name: 5. Clean Up
+        # Dọn dẹp các image cũ để tránh rác server
+        run: docker image prune -f
