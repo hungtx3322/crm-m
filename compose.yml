@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  web:
+      image: odoo
+      depends_on:
+        - db
+      ports:
+        - "1069:8069"
+        - "1071:8071"
+        - "1072:8072"
+
+      volumes:
+        - ./addons:/mnt/extra-addons
+        - ./config:/etc/odoo
+  db:
+    image: ankane/pgvector:latest
+    container_name: pgvector-db-crm-manh
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      POSTGRES_DB: postgres
+    ports:
+      - "1432:5432"
+volumes:
+  odoo-web-data:
+  pgdata:
