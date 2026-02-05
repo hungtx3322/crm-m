@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+       <record id="mf_industry_view_tree" model="ir.ui.view">
+           <field name="name">mf_industry_view_tree</field>
+           <field name="model">manufacturing.industry</field>
+           <field name="arch" type="xml">
+               <list string="Ngành nghề sản xuất" editable="bottom">
+                   <field name="name"/>
+               </list>
+           </field>
+       </record>
+
+        <record id="mf_industry_action" model="ir.actions.act_window">
+            <field name="name">Ngành nghề sản xuất</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">manufacturing.industry</field>
+            <field name="view_mode">list</field>
+        </record>
+
+        <menuitem id="mf_industry_list" name="Ngành nghề sản xuất" parent="crm.crm_menu_config" action="mf_industry_action" sequence="5"/>
+
+
+    </data>
+</odoo>

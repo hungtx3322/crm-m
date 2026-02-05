@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_saleorder_us_masterbatch">
+        <t t-foreach="docs" t-as="doc">
+            <html>
+                <head>
+                    <meta charset="utf-8"/>
+                    <style type="text/css">
+                        @font-face {
+                        font-family: 'Times New Roman';
+                        src: local('Times New Roman'), local('TimesNewRoman'),
+                        url('/crm_config/static/src/fonts/times.ttf') format('truetype');
+                        }
+                        @page { size: A4 portrait; margin: 40mm 7mm 20mm 7mm; }
+                        body {
+                        font-family: 'Times New Roman', Times, serif !important;
+                        font-size: 11pt;
+                        line-height: 1.4;
+                        color: #000;
+                        margin: 0;
+                        padding: 0;
+                        }
+                        main { width: 100%; }
+                        .logo { text-align: center; margin-bottom: 5px; }
+                        img.logo-img { max-height: 60px; border-radius: 50%; }
+                        .company-name { font-size: 14pt; font-weight: bold; text-align: center; margin: 5px 0; }
+                        .company-slogan { font-size: 10pt; text-align: center; font-style: italic; color: #555; margin:
+                        2px 0; }
+                        .company-info { font-size: 9pt; text-align: center; margin: 5px 0 10px; line-height: 1.3; }
+                        .separator { border: none; height: 3px; background: linear-gradient(to right, #ff0000, #ff9900,
+                        #ffff00, #33cc33, #0066ff, #9900ff); margin: 10px 0 15px; }
+                        h1 { text-align: center; font-size: 18pt; font-weight: bold; margin: 15px 0 10px;
+                        text-transform: uppercase; }
+                        p { margin: 6px 0; }
+                        strong { font-weight: bold; }
+                        table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+                        th, td { border: 1px solid #000; padding: 5px; }
+                        th { background-color: #f0f0f0; text-align: center; font-weight: bold; }
+                        .center { text-align: center; }
+                        .right { text-align: right; }
+                        .conditions { margin-top: 20px; }
+                        .conditions-title { font-weight: bold; margin-bottom: 5px; }
+                        ol { margin: 5px 0 10px 30px; padding-left: 0; list-style-type: decimal; }
+                        ol li { margin-bottom: 4px; }
+                        .signature { text-align: right; margin-top: 50px; font-size: 11pt; }
+                        .footer { text-align: center; margin-top: 40px; font-size: 9pt; color: #333; }
+                    </style>
+                </head>
+                <body>
+                    <main>
+                        <div class="logo">
+                            <img class="logo-img" t-if="doc.company_id.logo"
+                                 t-att-src="'data:image/png;base64,' + doc.company_id.logo.decode()" alt="Logo"/>
+                        </div>
+                        <div class="company-name">US MASTERBATCH JOINT STOCK COMPANY</div>
+                        <div class="company-slogan">USMASTERBATCH WE SAY WE DO</div>
+                        <div class="company-info">
+                            Address: Tien Xuan, Thach That, Hanoi, Vietnam Website: usmasterbatch.com
+                            <br/>
+                            Alibaba: usmasterbatch.trustpass.alibaba.com Email: info@usmasterbatch.com
+                        </div>
+                        <hr class="separator"/>
+
+                        <h1>BẢNG BÁO GIÁ</h1>
+
+                        <p>
+                            <strong>Kính gửi:</strong>
+                            <t t-esc="doc.partner_id.name or 'Công ty'"/>
+                        </p>
+
+                        <p>Lời đầu tiên, Công ty cổ phần US Masterbatch xin được gửi lời chào và lời chúc tốt đẹp nhất
+                            đến Quý công ty. Cảm ơn Quý công ty đã quan tâm và ủng hộ sản phẩm của US Masterbatch trong
+                            suốt thời gian qua. Sau đây là Bảng báo giá các sản phẩm được chào bán của công ty chúng
+                            tôi:
+                        </p>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>TÊN HÀNG HÓA</th>
+                                    <th>MÃ HÀNG</th>
+                                    <th>GIÁ BÁN</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="stt" t-value="1"/>
+                                <t t-foreach="doc.order_line.filtered(lambda l: not l.display_type)" t-as="line">
+                                    <tr>
+                                        <td class="center">
+                                            <t t-esc="stt"/>
+                                        </td>
+                                        <td>
+                                            <t t-esc="line.product_id.name"/>
+                                        </td>
+                                        <td class="center">
+                                            <t t-esc="line.product_id.default_code or ''"/>
+                                        </td>
+                                        <td class="right">
+                                            <t t-esc="line.price_unit"
+                                               t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                        </td>
+                                    </tr>
+                                    <t t-set="stt" t-value="stt + 1"/>
+                                </t>
+                                <tr>
+                                    <td colspan="4" class="center italic">… Hạt nhựa màu các loại theo nhu cầu của Quý
+                                        Khách hàng.
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="conditions">
+                            <p class="conditions-title">***Các điều kiện đi kèm báo giá:</p>
+                            <ol>
+                                <li>Giá trên chưa bao gồm thuế GTGT 8%</li>
+                                <li>Quy cách đóng gói: Đóng pallet, cuốn màng co, bao PE/PP</li>
+                                <li>Chất lượng: Theo mẫu đã thống nhất 2 bên.</li>
+                                <li>Số lượng: 27-30 tấn/cont</li>
+                                <li>Thời gian giao hàng: từ 3-5 ngày kể từ ngày xác nhận đơn đặt hàng.</li>
+                                <li>Địa điểm giao nhận: Tại Kho Việt Hoa - Tiền Giang</li>
+                                <li>Công nợ: 45 ngày kể từ ngày giao hàng</li>
+                                <li>Hình thức thanh toán: Chuyển khoản</li>
+                                <li>Hiệu lực báo giá: Áp dụng từ ngày
+                                    <t t-esc="doc.date_order.strftime('%d.%m.%Y') if doc.date_order else ''"/>
+                                    đến khi có thông báo giá mới!
+                                </li>
+                            </ol>
+                        </div>
+
+                        <p style="margin-top: 30px;">Mọi thông tin chi tiết Quý khách hàng vui lòng liên hệ Mr Lập – SĐT
+                            0915.604.036
+                        </p>
+
+                        <div class="signature">
+                            Tp. HCM, ngày
+                            <t t-esc="doc.date_order.strftime('%d') if doc.date_order else ''"/>
+                            tháng
+                            <t t-esc="doc.date_order.strftime('%m') if doc.date_order else ''"/>
+                            năm
+                            <t t-esc="doc.date_order.strftime('%Y') if doc.date_order else ''"/>
+                            <br/>
+                            <strong>US MASTERBATCH</strong>
+                        </div>
+
+                        <div class="footer">
+                            ISO 9001-2015 • FDA • REACH
+                            <br/>
+                            + Filler Masterbatch + Color Masterbatch + Additive Masterbatch + Compound + Desiccant
+                            Masterbatch
+                        </div>
+                    </main>
+                </body>
+            </html>
+        </t>
+    </template>
+
+    <record id="action_report_saleorder_us_masterbatch" model="ir.actions.report">
+        <field name="name">Báo Giá US Masterbatch</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">report_saleorder_us_masterbatch</field>
+        <field name="report_file">report_saleorder_us_masterbatch</field>
+        <field name="print_report_name">('Bao Gia - %s' % (object.name))</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="crm_config.paperformat_a4"/>
+    </record>
+
+    <record id="paperformat_a4" model="report.paperformat">
+        <field name="name">A4 Custom for Báo Giá</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">96</field>
+    </record>
+
+</odoo>

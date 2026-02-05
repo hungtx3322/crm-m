@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_taical_quotation">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="crm_config.report_taical_quotation_document" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_taical_quotation_document">
+        <t t-call="web.basic_layout">
+            <!-- Report Header -->
+            <div class="header" style="border: none !important; padding: 0; margin: 0; font-family: 'Times New Roman', serif;">
+                <div style="width: 100%; border: none !important; clear: both; overflow: hidden; display: block;">
+                    <div style="float: left; width: 22%; text-align: left; border: none !important; padding: 0; margin: 0;">
+                        <img src="/crm_config/static/src/pic/Picture1.png" style="max-height: 100px; width: auto; display: block;" alt="Logo"/>
+                    </div>
+                    <div style="float: left; width: 78%; text-align: center; border: none !important; padding: 0; margin: 0;">
+                        <div style="font-size: 21pt; font-weight: bold; font-family: 'Times New Roman', serif; color: #000; margin-bottom: 2px; line-height: 1.1; border: none !important;">
+                            US MASTERBATCH JOINT STOCK COMPANY
+                        </div>
+                        <div style="font-size: 13pt; color: #000; line-height: 1.35; border: none !important; margin-top: 28px;">
+                            <strong>Address:</strong> Tien Xuan, Thach That, Hanoi, Vietnam 
+                            <strong>Website:</strong> usmasterbatch.com<br/>
+                            <strong>Alibaba:</strong> usmasterbatch.trustpass.alibaba.com 
+                            <strong>Email:</strong> info@usmasterbatch.com
+                        </div>
+                    </div>
+                </div>
+                <!-- Tricolor Separator -->
+                <div style="width: 100%; margin: 2px 0 0 0; border: none !important; clear: both;">
+                    <div style="height: 1pt; width: 100%; background-color: #005596; display: block; border: none !important; margin: 0;"></div>
+                    <div style="height: 1pt; width: 100%; background-color: #ffc20e; display: block; margin-top: 3pt; border: none !important;"></div>
+                    <div style="height: 1pt; width: 100%; background-color: #e31e24; display: block; margin-top: 3pt; border: none !important;"></div>
+                </div>
+            </div>
+
+            <!-- Main Page Content -->
+            <div class="page" style="font-family: 'Times New Roman', serif; font-size: 14pt; line-height: 1.4; color: #000;">
+                <style>
+                    .text-center { text-align: center; }
+                    .text-right { text-align: right; }
+                    table.product-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+                    table.product-table th, table.product-table td { border: 1px solid #000 !important; padding: 8px 10px; font-size: 14pt; }
+                    table.product-table th { background-color: #f2f2f2; font-weight: bold; text-align: center; }
+                </style>
+
+                <h1 style="font-size: 18pt; font-weight: bold; text-align: center; margin: 30px 0 20px;">
+                    BẢNG BÁO GIÁ
+                </h1>
+
+                <p style="font-weight: bold; text-decoration: underline; text-indent: 25px; margin-bottom: 10px; font-size: 14pt;">
+                    Kính gửi: <t t-if="o.partner_id.is_company">Công ty </t><span t-field="o.partner_id.name"/>
+                </p>
+
+                <p style="text-align: justify; text-indent: 25px; margin-bottom: 15px; font-size: 14pt;">
+                    Lời đầu tiên, <strong>Công ty cổ phần US Masterbatch</strong> xin được gửi lời chào và lời 
+                    chúc tốt đẹp nhất đến Quý công ty. Cảm ơn Quý công ty đã quan tâm và ủng hộ sản 
+                    phẩm của US Masterbatch trong suốt thời gian qua. Sau đây là <strong>Bảng báo giá các 
+                    sản phẩm</strong> được chào bán của công ty chúng tôi:
+                </p>
+
+                <table class="product-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 8%;">STT</th>
+                            <th style="width: 50%;">TÊN HÀNG HÓA</th>
+                            <th style="width: 20%;">MÃ HÀNG</th>
+                            <th style="width: 22%;">GIÁ BÁN</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="line_num" t-value="1"/>
+                        <tr t-foreach="o.order_line.filtered(lambda l: not l.display_type)" t-as="line">
+                            <td class="text-center"><span t-esc="line_num"/></td>
+                            <td><span t-field="line.product_id.name"/></td>
+                            <td class="text-center"><span t-field="line.product_id.default_code"/></td>
+                            <td class="text-right"><span t-esc="'{:,.0f}'.format(line.price_unit)"/></td>
+                            <t t-set="line_num" t-value="line_num + 1"/>
+                        </tr>
+                        <tr>
+                            <td colspan="4" style="text-align: center; font-style: italic;">
+                                … Hạt nhựa màu các loại theo nhu cầu của Quý Khách hàng.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 15px;">
+                    <p style="font-weight: bold; font-style: italic; margin-bottom: 8px; text-decoration: underline;">
+                        ***Các điều kiện đi kèm báo giá:
+                    </p>
+                    <ol style="margin: 10px 0 15px 0; padding-left: 25px;">
+                        <li style="margin-bottom: 5px; text-align: justify;">Giá trên chưa bao gồm thuế GTGT 8%</li>
+                        <li style="margin-bottom: 5px; text-align: justify;">Quy cách đóng gói: <span t-field="o.x_moq.name"/></li>
+                        <li style="margin-bottom: 5px; text-align: justify;">Chất lượng: Theo mẫu đã thống nhất 2 bên.</li>
+                        <li style="margin-bottom: 5px; text-align: justify;">Số lượng: <span t-field="o.x_sl_moq"/></li>
+                        <li style="margin-bottom: 5px; text-align: justify;">Thời gian giao hàng: <span t-field="o.x_time_deliver"/></li>
+                        <li style="margin-bottom: 5px; text-align: justify;">Địa điểm giao nhận: <span t-field="o.x_local_deliver"/></li>
+                        <li style="margin-bottom: 5px; text-align: justify;">Công nợ: <span t-field="o.payment_term_id.name"/></li>
+                        <li style="margin-bottom: 5px; text-align: justify;">Hình thức thanh toán: <strong><span t-field="o.preferred_payment_method_line_id.name"/></strong></li>
+                        <li style="margin-bottom: 5px; text-align: justify;">Hiệu lực báo giá: Áp dụng từ ngày <t t-if="o.date_order" t-esc="o.date_order.strftime('%d.%m.%Y')"/> đến khi có thông báo giá mới!</li>
+                    </ol>
+                </div>
+
+                <p style="margin-top: 20px; text-indent: 25px;">
+                    Mọi thông tin chi tiết Quý khách hàng vui lòng liên hệ Mr Lập – SĐT <strong>0915.604.036</strong>
+                </p>
+
+                <div style="text-align: right; margin-top: 30px; font-style: italic;">
+                    <em>Tp. HCM, ngày <t t-if="o.date_order" t-esc="o.date_order.strftime('%d')"/> tháng <t t-if="o.date_order" t-esc="o.date_order.strftime('%m')"/> năm <t t-if="o.date_order" t-esc="o.date_order.strftime('%Y')"/></em>
+                    <span style="font-weight: bold; font-style: normal; text-transform: uppercase; display: block; margin-top: 5px;">
+                        US MASTERBATCH
+                    </span>
+                </div>
+            </div>
+
+            <!-- Report Footer -->
+            <div class="footer">
+                <div style="border-top: 1px solid #ddd; padding-top: 10px; text-align: center; width: 100%; font-family: 'Times New Roman', serif; color: #666;">
+                    <div style="text-align: center; margin-bottom: 5px; font-weight: bold; font-size: 13pt;">
+                        <span style="margin: 0 20px;">ISO 9001-2015 ☑</span>
+                        <span style="margin: 0 20px;">FDA ☑</span>
+                        <span style="margin: 0 20px;">REACH ☑</span>
+                    </div>
+                    <div style="font-size: 10.5pt; margin-top: 5px;">
+                        <span style="margin: 0 8px;">✦ Filler Masterbatch</span>
+                        <span style="margin: 0 8px;">✦ Color Masterbatch</span>
+                        <span style="margin: 0 8px;">✦ Additive Masterbatch</span>
+                        <span style="margin: 0 8px;">✦ Compound</span>
+                        <span style="margin: 0 8px;">✦ Desiccant Masterbatch</span>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Paper Format (Updated for official Header/Footer) -->
+    <record id="paperformat_taical_a4" model="report.paperformat">
+        <field name="name">A4 TAICAL Quotation</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">45</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">35</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <!-- Report Action -->
+    <record id="action_report_taical_quotation" model="ir.actions.report">
+        <field name="name">Báo Giá TAICAL</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">crm_config.report_taical_quotation</field>
+        <field name="report_file">crm_config.report_taical_quotation</field>
+        <field name="print_report_name">'Bao_Gia_TAICAL_' + (object.name or '')</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="crm_config.paperformat_taical_a4"/>
+    </record>
+</odoo>

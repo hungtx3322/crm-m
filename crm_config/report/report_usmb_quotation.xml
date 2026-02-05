@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_usmb_quotation">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="crm_config.report_usmb_quotation_document" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+    <template id="report_usmb_quotation_document">
+        <t t-call="web.basic_layout">
+            <style>
+                .usmb-green { color: #00b050; }
+                .usmb-bg-green { background-color: #00b050; color: white; }
+                .report-content { font-family: 'Arial', sans-serif; font-size: 10pt; color: #333; line-height: 1.2; }
+                table.info-table { width: 100%; border-collapse: collapse; margin-bottom: 5px; }
+                table.info-table td { border: 1px solid #777; padding: 2px 5px; }
+                table.info-table td.label { width: 45%; font-weight: bold; background-color: #f2f2f2; }
+
+                .section-header { width: 100%; padding: 3px 10px; font-weight: bold; margin-bottom: 3px; border-bottom:
+                2px double #00b050; font-size: 11pt; }
+
+                table.product-table { width: 100%; border-collapse: collapse; margin-top: 5px; table-layout: fixed; }
+                table.product-table th { background-color: #00b050; color: white; padding: 4px 2px; text-align: center;
+                border: 1px solid #ddd; font-size: 11pt; }
+                table.product-table td { border: 1px solid #ddd; padding: 2px 2px; vertical-align: middle; text-align:
+                center; height: 27px; word-wrap: break-word; font-size: 11pt; }
+                table.product-table td.text-left { text-align: left; padding-left: 5px; }
+
+                .terms-section { margin-top: 5px; }
+                .term-row { display: flex; margin-bottom: 2px; }
+                .term-label { width: 130px; font-weight: bold; }
+                .term-value { flex: 1; white-space: pre-line; }
+
+                .footer-msg { margin-top: 10px; text-align: center; font-size: 9pt; }
+                .page-break { page-break-after: always; }
+            </style>
+
+            <t t-set="all_lines" t-value="o.order_line.filtered(lambda l: not l.display_type)"/>
+            <t t-set="chunk_size" t-value="15"/>
+            <t t-set="total_lines" t-value="len(all_lines)"/>
+            <t t-set="num_pages" t-value="int((total_lines + chunk_size - 1) / chunk_size) or 1"/>
+
+            <t t-foreach="range(num_pages)" t-as="page_idx">
+                <div t-att-class="'page report-content' + (' page-break' if page_idx &lt; num_pages - 1 else '')">
+                    <!-- Top Header Row 1: Logo and Centered Title -->
+                    <div style="width: 100%; display: table; border-collapse: collapse; margin-bottom: 2px;">
+                        <div style="display: table-row;">
+                            <!-- Col 1: Logo -->
+                            <div style="display: table-cell; width: 25%; vertical-align: middle; text-align: left;">
+                                <img src="/crm_config/static/src/pic/Picture1.png" style="max-height: 110px;"
+                                     alt="Logo"/>
+                            </div>
+                            <!-- Col 2: Centered Title (Centered on page) -->
+                            <div style="display: table-cell; width: 50%; vertical-align: middle; text-align: center;">
+                                <h1 class="usmb-green"
+                                    style="font-weight: bold; font-size: 48pt; margin: 0; line-height: 1;">QUOTATION
+                                </h1>
+                            </div>
+                            <!-- Col 3: Spacer to maintain centering -->
+                            <div style="display: table-cell; width: 25%; vertical-align: middle;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Header Row 2: Address and Info Table -->
+                    <div style="width: 100%; display: table; margin-bottom: 10px; border-collapse: collapse;">
+                        <div style="display: table-row;">
+                            <!-- Col 1: Company Address -->
+                            <div style="display: table-cell; width: 60%; vertical-align: top; text-align: left; font-size: 9pt; line-height: 1.1;">
+                                Hamlet 2, Yen Xuan Commune,
+                                <br/>
+                                Ha Noi city, Viet Nam
+                                <br/>
+                                Website: usmasterbatch.com
+                                <br/>
+                                Phone:
+                                <span t-field="o.company_id.phone"/>
+                                <br/>
+                                Prepared by:
+                                <span t-field="o.user_id.name"/>
+                            </div>
+                            <!-- Col 2: Info Table (Right aligned) -->
+                            <div style="display: table-cell; width: 40%; vertical-align: top; text-align: right;">
+                                <table class="info-table"
+                                       style="width: 250px; font-size: 9pt; float: right; margin-bottom: 0;">
+                                    <tr>
+                                        <td class="label" style="width: 50%;">Date</td>
+                                        <td>
+                                            <span t-field="o.date_order"
+                                                  t-options='{"widget": "date", "format": "dd/MMM/yy"}'/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label">Number of quote</td>
+                                        <td>
+                                            <span t-field="o.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label">Customer ID</td>
+                                        <td>
+                                            <span t-field="o.partner_id.id"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="label">Valid till</td>
+                                        <td>
+                                            <span t-field="o.validity_date"
+                                                  t-options='{"widget": "date", "format": "dd/MMM/yy"}'/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Customer Section -->
+                    <div class="usmb-bg-green section-header">
+                        CUSTOMER INFORMATION
+                    </div>
+                    <div style="font-weight: bold; font-size: 12pt; margin: 5px 0;">
+                        <span t-field="o.partner_id.name"/>
+                        -
+                        <span t-field="o.partner_id.country_id.name"/>
+                    </div>
+
+                    <!-- Product Table -->
+                    <table class="product-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 25%;">Product name</th>
+                                <th style="width: 15%;">Grade name</th>
+                                <th style="width: 25%;">Specifications</th>
+                                <th style="width: 20%;">Recommended usage</th>
+                                <th style="width: 15%;">PRICE CIF
+                                    <span t-field="o.partner_id.city"/>
+                                    PORT,
+                                    <span t-field="o.partner_id.country_id.name"/>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="chunk" t-value="all_lines[page_idx * chunk_size : (page_idx + 1) * chunk_size]"/>
+                            <t t-foreach="chunk" t-as="line">
+                                <tr>
+                                    <td class="text-left">
+                                        <span t-field="line.product_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.product_id.default_code"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.name"/>
+                                    </td>
+                                    <td>
+                                        <t t-if="line.product_id.description_sale">
+                                            <span t-field="line.product_id.description_sale"/>
+                                        </t>
+                                    </td>
+                                    <td style="font-weight: bold;">
+                                        <span t-field="line.price_unit"
+                                              t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                        /
+                                        <span t-field="line.product_uom_id.name"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <!-- Fill empty rows to make strictly 6 lines per page -->
+                            <t t-foreach="range(chunk_size - len(chunk))" t-as="empty_row">
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+
+                    <!-- Terms Section & Footer (Only on last page) -->
+                    <t t-if="page_idx == num_pages - 1">
+                        <div class="terms-section" style="font-size: 11pt;">
+                            <div style="font-weight: bold; margin-bottom: 8px;">Other terms and condition</div>
+
+                            <div style="display: table; width: 100%; border-collapse: collapse;">
+                                <div style="display: table-row;">
+                                    <div style="display: table-cell; width: 150px; font-weight: bold; vertical-align: top; padding-bottom: 5px;">
+                                        Payment terms:
+                                    </div>
+                                    <div style="display: table-cell; vertical-align: top; padding-bottom: 5px;">
+                                        <span t-field="o.payment_term_id.name"/>
+                                    </div>
+                                </div>
+                                <div style="display: table-row;">
+                                    <div style="display: table-cell; width: 150px; font-weight: bold; vertical-align: top; padding-bottom: 5px;">
+                                        Packaging:
+                                    </div>
+                                    <div style="display: table-cell; vertical-align: top; padding-bottom: 5px;">
+                                        <span t-field="o.x_moq.name"/>
+                                    </div>
+                                </div>
+                                <div style="display: table-row;">
+                                    <div style="display: table-cell; width: 150px; font-weight: bold; vertical-align: top; padding-bottom: 5px;">
+                                        Loading:
+                                    </div>
+                                    <div style="display: table-cell; vertical-align: top; padding-bottom: 5px;">
+                                        <span t-field="o.x_expen_diliver"/>
+                                    </div>
+                                </div>
+                                <div style="display: table-row;">
+                                    <div style="display: table-cell; width: 150px; font-weight: bold; vertical-align: top; padding-bottom: 5px;">
+                                        Delivery time:
+                                    </div>
+                                    <div style="display: table-cell; vertical-align: top; padding-bottom: 5px;">
+                                        <span t-field="o.x_time_deliver"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Footer contact -->
+                        <div class="footer-msg">
+                            <div>If you have any questions about this price quote, please contact</div>
+                            <div style="font-weight: bold;">
+                                <span t-field="o.user_id.name"/>,<span t-esc="o.user_id.phone or '+84'"/>,
+                                <span t-esc="o.user_id.email or o.company_id.email"/>
+                            </div>
+                            <div style="font-weight: bold; font-style: italic; font-size: 13pt; margin-top: 5px;">
+                                Thank You For Your Business!
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- Paper Format -->
+    <record id="paperformat_usmb_quotation_a4" model="report.paperformat">
+        <field name="name">A4 USMB Quotation</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <!-- Report Action -->
+    <record id="action_report_usmb_quotation" model="ir.actions.report">
+        <field name="name">Báo Giá USMB New</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">crm_config.report_usmb_quotation</field>
+        <field name="report_file">crm_config.report_usmb_quotation</field>
+        <field name="print_report_name">'Quotation_' + (object.name or '')</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="crm_config.paperformat_usmb_quotation_a4"/>
+    </record>
+</odoo>

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="group_sale_team_leader" model="res.groups">
+            <field name="name">Team Leader - See Team Documents</field>
+            <field name="privilege_id" ref="sales_team.res_groups_privilege_sales"/>
+            <field name="implied_ids" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+            <field name="comment">Team Leader See Own + Team Orders</field>
+        </record>
+
+        <record id="rule_crm_lead_team_leader" model="ir.rule">
+            <field name="name">CRM: Team Leader See Own + Team Leads/Opps</field>
+            <field name="model_id" ref="crm.model_crm_lead"/>
+            <field name="domain_force">['|', ('user_id', '=', user.id), ('team_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_sale_team_leader'))]"/>
+            <field name="global" eval="False"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="rule_sale_order_team_leader" model="ir.rule">
+            <field name="name">Sale: Team Leader See Own + Team Orders</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="domain_force">['|', ('user_id', '=', user.id), ('team_id.user_id', '=', user.id)]</field>
+            <field name="groups" eval="[(4, ref('group_sale_team_leader'))]"/>
+            <field name="global" eval="False"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <record id="rule_sale_order_line_team_leader" model="ir.rule">
+            <field name="name">Sale: Team Leader See Own + Team Order Lines</field>
+            <field name="model_id" ref="sale.model_sale_order_line"/>
+            <field name="domain_force">
+                ['|', ('order_id.user_id', '=', user.id), ('order_id.team_id.user_id', '=', user.id) ]
+            </field>
+            <field name="groups" eval="[(4, ref('group_sale_team_leader'))]"/>
+            <field name="global" eval="False"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- res.partner Rules -->
+        <record id="rule_res_partner_salesman" model="ir.rule">
+            <field name="name">res.partner: Salesman: own customers only</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="domain_force">['|', '|', ('partner_share', '=', False), ('user_id', '=', user.id), ('user_id', '=', False)]</field>
+            <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+        </record>
+
+        <record id="rule_res_partner_team_leader" model="ir.rule">
+            <field name="name">res.partner: Team Leader: team customers</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="domain_force">['|', '|', '|', ('partner_share', '=', False), ('user_id', '=', user.id), ('user_id.crm_team_ids.user_id', '=', user.id), ('user_id', '=', False)]</field>
+            <field name="groups" eval="[(4, ref('group_sale_team_leader'))]"/>
+        </record>
+
+        <record id="rule_res_partner_all_docs" model="ir.rule">
+            <field name="name">res.partner: All Documents: everything</field>
+            <field name="model_id" ref="base.model_res_partner"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman_all_leads'))]"/>
+        </record>
+
+    </data>
+</odoo>

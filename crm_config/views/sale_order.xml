@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_order_tree_overdue_highlight" model="ir.ui.view">
+            <field name="name">sale.order.tree.overdue.highlight</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.sale_order_tree"/>
+            <field name="arch" type="xml">
+                <list position="attributes">
+                    <attribute name="decoration-danger">x_has_overdue_payment == True</attribute>
+                </list>
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="x_has_overdue_payment" invisible="1"/>
+                </xpath>
+
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="x_so_name" optional="hide"/>
+                    <field name="x_contract" optional="hide"/>
+                    <field name="x_date_contract" optional="hide"/>
+                    <field name="x_cang_dich" optional="hide"/>
+                    <field name="x_cuoc_bien" optional="hide"/>
+                    <field name="x_number_bl" optional="hide"/>
+                    <field name="x_date_etd" optional="hide"/>
+                    <field name="x_date_eta" optional="hide"/>
+                    <field name="x_check_bank_fees" optional="hide"/>
+                    <field name="x_commission" optional="hide"/>
+                    <field name="x_dntt" optional="hide"/>
+                    <field name="x_moq" optional="hide"/>
+                    <field name="x_sl_moq" optional="hide"/>
+                    <field name="x_time_deliver" optional="hide"/>
+                    <field name="x_local_deliver" optional="hide"/>
+                    <field name="x_expen_diliver" optional="hide"/>
+                    <field name="x_has_overdue_payment" optional="hide"/>
+                    <field name="x_total_payment_amount" optional="hide"/>
+                    <field name="x_total_amount_pay" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_order_form_mview" model="ir.ui.view">
+            <field name="name">sale.order</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//notebook//page[@name='other_information']" position="after">
+                    <page name="payment_term_f" string="Payment Term">
+                        <field name="x_payment_term_ids">
+                            <list editable="bottom">
+                                <field name="sequence"/>
+                                <field name="payment_date"/>
+                                <field name="amount" sum="Tổng tiền thực nhận"/>
+                                <field name="currency_id" column_invisible="1"/>
+                                <field name="is_paid"/>
+                                <field name="amount_pay" sum="Tổng tiền đã thanh toán"/>
+                                <field name="note"/>
+                            </list>
+                        </field>
+                        <group name="note_group" col="6" class="mt-2 mt-md-0">
+                            <group colspan="3" class="order-1 order-lg-0">
+                            </group>
+                            <group class="oe_subtotal_footer  order-0 order-lg-1 flex-column gap-0 gap-sm-3" colspan="3"
+                                   name="Total">
+                                <field name="x_total_payment_amount" readonly="1"/>
+                                <field name="x_total_amount_pay" readonly="1"/>
+                                <field name="amount_total" string="Tổng tiền đơn hàng" readonly="1"/>
+                            </group>
+                        </group>
+                    </page>
+
+                </xpath>
+
+                <xpath expr="//field[@name='partner_id']" position="before">
+                    <field name="x_so_name"/>
+                </xpath>
+
+
+                <xpath expr="//field[@name='payment_term_id']" position="attributes">
+                    <attribute name="options"></attribute>
+                </xpath>
+
+                <xpath expr="//field[@name='partner_id']" position="after">
+                    <field name="x_cang_dich"/>
+                    <field name="x_cuoc_bien"/>
+                    <field name="x_number_bl"/>
+                    <field name="x_date_etd"/>
+                    <field name="x_date_eta"/>
+                </xpath>
+                <xpath expr="//field[@name='validity_date']" position="before">
+                    <field name="x_contract"/>
+                    <field name="x_date_contract"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="x_dntt"/>
+                    <field name="x_check_bank_fees"/>
+                    <field name="x_commission"/>
+                </xpath>
+
+
+                <xpath expr="//notebook//page[@name='other_information']//label[@for='commitment_date']"
+                       position="before">
+
+                    <field name="x_moq"/>
+                    <field name="x_sl_moq"/>
+                    <field name="x_time_deliver"/>
+                    <field name="x_local_deliver"/>
+                    <field name="x_expen_diliver"/>
+                </xpath>
+
+
+            </field>
+        </record>
+
+        <record id="view_order_form_inherit_separate_cols" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.separate.cols</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <!-- Hide the original name field to stop column merging -->
+                <xpath expr="//field[@name='order_line']/list/field[@name='name']" position="attributes">
+                    <attribute name="column_invisible">True</attribute>
+                    <attribute name="widget"/>
+                </xpath>
+                <!-- Add the helper field as a separate column -->
+                <xpath expr="//field[@name='order_line']/list/field[@name='name']" position="after">
+                    <field name="x_description" string="Mô tả" widget="sol_text" optional="show"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

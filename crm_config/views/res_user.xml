@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="crm_config_res_users_modif" model="ir.ui.view">
+            <field name="name">res.users</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="x_name_en" placeholder="Tên Tiếng Anh"/>
+
+                </xpath>
+
+            </field>
+        </record>
+
+        <record id="crm_config_res_users" model="ir.ui.view">
+            <field name="name">res.users</field>
+            <field name="model">res.users</field>
+            <field name="inherit_id" ref="base.view_users_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='name']" position="after">
+                    <field name="x_name_en" placeholder="Tên Tiếng Anh"/>
+
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

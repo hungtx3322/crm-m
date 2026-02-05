@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_manufacturing_industry,access.manufacturing_industry,model_manufacturing_industry,base.group_user,1,1,1,1
+access_sale_order_payment_term,access.sale_order_payment_term,model_sale_order_payment_term,base.group_user,1,1,1,1
+access_dec_kpi,access.dec_kpi,model_dec_kpi,base.group_user,1,1,1,1
+access_product_moq,access.product_moq,model_product_moq,base.group_user,1,1,1,1
+sale.access_account_payment_term_salesman,account.payment.term,account.model_account_payment_term,sales_team.group_sale_salesman,1,1,1,1
+access_account_payment_term_line_salesman,account.payment.term.line,account.model_account_payment_term_line,sales_team.group_sale_salesman,1,1,1,1
