@@ -93,7 +93,7 @@
                     </p>
                     <ol style="margin: 10px 0 15px 0; padding-left: 25px;">
                         <li style="margin-bottom: 5px; text-align: justify;">Giá trên chưa bao gồm thuế GTGT 8%</li>
-                        <li style="margin-bottom: 5px; text-align: justify;">Quy cách đóng gói: <span t-field="o.x_moq.name"/></li>
+                        <li style="margin-bottom: 5px; text-align: justify;">Quy cách đóng gói: <span t-field="o.x_moq"/></li>
                         <li style="margin-bottom: 5px; text-align: justify;">Chất lượng: Theo mẫu đã thống nhất 2 bên.</li>
                         <li style="margin-bottom: 5px; text-align: justify;">Số lượng: <span t-field="o.x_sl_moq"/></li>
                         <li style="margin-bottom: 5px; text-align: justify;">Thời gian giao hàng: <span t-field="o.x_time_deliver"/></li>

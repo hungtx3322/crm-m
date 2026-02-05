@@ -199,7 +199,7 @@
                                         Packaging:
                                     </div>
                                     <div style="display: table-cell; vertical-align: top; padding-bottom: 5px;">
-                                        <span t-field="o.x_moq.name"/>
+                                        <span t-field="o.x_moq"/>
                                     </div>
                                 </div>
                                 <div style="display: table-row;">

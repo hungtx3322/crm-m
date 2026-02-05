@@ -24,7 +24,6 @@ class MailActivitySchedule(models.TransientModel):
         return res
 
 
-
 class MailActivity(models.Model):
     _inherit = 'mail.activity'
 

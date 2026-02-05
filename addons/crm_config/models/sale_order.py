@@ -27,7 +27,7 @@ class SaleOrder(models.Model):
     x_commission = fields.Char(string='Ghi chú Commission cho khách', )
     x_currency_id = fields.Many2one('res.currency', string='Currency')
     x_dntt = fields.Boolean('ĐNTT com cho cá nhân sales')
-    x_moq = fields.Many2one('product.moq', 'Quy cách đóng gói')
+    x_moq = fields.Char(string='Quy cách đóng gói')
     x_sl_moq = fields.Char('Số lượng')
     x_time_deliver = fields.Char('Thời gian giao hàng')
     x_local_deliver = fields.Char('Địa điểm giao hàng')

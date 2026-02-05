@@ -113,7 +113,7 @@
 
                 <div style="margin-top: 15px; font-size: 13pt;">
                     <ul class="terms-list">
-                        <li><label>1. Quy cách đóng gói:</label> <span t-field="o.x_moq.name"/></li>
+                        <li><label>1. Quy cách đóng gói:</label> <span t-field="o.x_moq"/></li>
                         <li><label>2. Thời gian giao hàng:</label> <span t-field="o.x_time_deliver"/></li>
                         <li><label>3. Địa điểm giao hàng:</label> <span t-field="o.x_local_deliver"/></li>
                         <li><label>4. Chi phí bốc xếp:</label> <span t-field="o.x_expen_diliver"/></li>
