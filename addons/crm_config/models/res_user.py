@@ -10,3 +10,14 @@ class ResUsers(models.Model):
 
     x_name_en = fields.Char('Tên tiếng anh')
 
+    @property
+    def SELF_READABLE_FIELDS(self):
+        return super().SELF_READABLE_FIELDS + [
+            "x_name_en",
+        ]
+
+    @property
+    def SELF_WRITEABLE_FIELDS(self):
+        return super().SELF_WRITEABLE_FIELDS + [
+            "x_name_en",
+        ]

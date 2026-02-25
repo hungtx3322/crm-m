@@ -1,0 +1,20 @@
+*.log
+
+*.tmp
+
+credentials.txt
+
+build/
+dist/
+
+node_modules/
+
+.DS_Store # macOS specific
+Thumbs.db # Windows specific
+.vscode/  # VS Code editor settings
+.idea/    # IntelliJ/WebStorm IDE settings
+
+__pycache__/
+venv/
+
+!logs/important.log
