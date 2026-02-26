@@ -7,15 +7,24 @@
             <field name="model">crm.lead</field>
             <field name="inherit_id" ref="crm.crm_lead_view_form"/>
             <field name="arch" type="xml">
+                <xpath expr="//notebook/page[@name='extra']//field[@name='source_id']" position="replace"/>
+                <xpath expr="//notebook/page[@name='lead']//field[@name='source_id']" position="replace"/>
+
 
                 <xpath expr="//field[@name='tag_ids']" position="after">
                     <field name="is_potential"/>
+                    <field name="source_id" required="1"/>
                 </xpath>
+                <xpath expr="//group[@name='lead_priority']//field[@name='tag_ids']" position="after">
+                    <field name="source_id" required="1"/>
+                </xpath>
+
 
                 <xpath expr="//notebook/page[@name='lead']//field[@name='partner_name']" position="after">
                     <field name="business_type"/>
                     <field name="manufacturing_industry_id"/>
                 </xpath>
+
                 <xpath expr="//notebook/page[@name='internal_notes']//field[@name='description']" position="before">
                     <group>
                         <group>
@@ -60,6 +69,25 @@
             <field name="name">crm.lead</field>
             <field name="model">crm.lead</field>
             <field name="inherit_id" ref="crm.crm_case_tree_view_oppor"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='priority']" position="after">
+                    <field name="business_type" optional="hide"/>
+                    <field name="manufacturing_industry_id" optional="hide"/>
+                    <field name="lead_code" optional="hide"/>
+                    <field name="approach_date" optional="hide"/>
+                    <field name="product_id" optional="hide"/>
+                    <field name="required_tonnage" optional="hide"/>
+                    <field name="is_potential" optional="hide"/>
+                    <field name="description" optional="hide"/>
+
+                </xpath>
+            </field>
+        </record>
+
+        <record id="crm_case_tree_view_leads" model="ir.ui.view">
+            <field name="name">crm.lead</field>
+            <field name="model">crm.lead</field>
+            <field name="inherit_id" ref="crm.crm_case_tree_view_leads"/>
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='priority']" position="after">
                     <field name="business_type" optional="hide"/>

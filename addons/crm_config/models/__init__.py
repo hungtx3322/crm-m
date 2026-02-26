@@ -11,5 +11,6 @@ from . import res_partner
 from . import conf_kpi
 from . import mail_activity_schedule
 from . import product
+from . import partner_summary
 
 

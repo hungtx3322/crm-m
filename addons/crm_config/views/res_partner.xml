@@ -26,11 +26,63 @@
                 <xpath expr="//field[@name='country_id']" position="attributes">
                     <attribute name="options"></attribute>
                 </xpath>
+                <xpath expr="//field[@name='category_id']" position="after">
+                    <field name="source_id" required="1"/>
+                </xpath>
 
 
             </field>
         </record>
 
+<!--        <record id="crm_config_partner_view_list" model="ir.ui.view">-->
+<!--            <field name="name">crm_config_partner_view_tree</field>-->
+<!--            <field name="model">res.partner</field>-->
+<!--            <field name="arch" type="xml">-->
+<!--                <list string="crm_config_partner_tree" create="0" edit="0">-->
+<!--                    <field name="name"/>-->
+<!--                    <field name="user_id"/>-->
+<!--                    <field name="country_id"/>-->
+<!--                </list>-->
+<!--            </field>-->
+<!--        </record>-->
+
+<!--        <record id="crm_config_partner_views_action" model="ir.actions.act_window">-->
+<!--            <field name="name">Liên Hệ (readonly)</field>-->
+<!--            <field name="type">ir.actions.act_window</field>-->
+<!--            <field name="res_model">res.partner</field>-->
+<!--            <field name="view_mode">list</field>-->
+<!--            <field name="view_ids" eval="[(5, 0, 0),-->
+<!--            (0, 0, {'view_mode': 'list', 'view_id': ref('crm_config_partner_view_list')}),-->
+<!--        ]"/>-->
+<!--            <field name="domain">[('user_ids','=', False)]</field>-->
+<!--        </record>-->
+<!--        <menuitem id="config_menu_res_partner_list" name="Liên Hệ (readonly)" parent="contacts.menu_contacts"-->
+<!--                  action="crm_config.crm_config_partner_views_action" sequence="4"/>-->
+
+
+        <record id="view_partner_summary_tree" model="ir.ui.view">
+            <field name="name">partner.summary.list</field>
+            <field name="model">partner.summary</field>
+            <field name="arch" type="xml">
+                <list string="Liên hệ rút gọn" create="false" edit="false" delete="false">
+                    <field name="display_name"/>
+                    <field name="user_id"/>
+                    <field name="country_id" options="{'no_open': True, 'no_create': True}"/>
+                </list>
+            </field>
+        </record>
+
+        <record id="action_partner_summary" model="ir.actions.act_window">
+            <field name="name">Liên hệ (readonly)</field>
+            <field name="res_model">partner.summary</field>
+            <field name="view_mode">list</field>
+        </record>
+
+        <menuitem id="menu_partner_summary"
+                  name="Liên hệ (readonly)"
+                  action="action_partner_summary"
+                  parent="contacts.menu_contacts"
+                  sequence="100"/>
 
     </data>
 </odoo>

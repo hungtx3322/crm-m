@@ -28,38 +28,85 @@ class CrmLead(models.Model):
     sorder_line_ids = fields.One2many('sale.order.line', 'x_lead_id', string='Danh sách bán hàng')
     is_potential = fields.Boolean('Là khách hàng tiềm năng')
 
-    @api.constrains('partner_name', 'phone')
-    def _check_duplicate_lead(self):
-        for record in self:
-            company_name = record.partner_name
-            phone = record.phone
-            if company_name or phone:
+    # @api.constrains('partner_name', 'phone')
+    # def _check_duplicate_lead(self):
+    #     for record in self:
+    #         company_name = record.partner_name
+    #         phone = record.phone
+    #         if company_name or phone:
+    #             domain = ['|', ('active', '=', True), ('active', '=', False)]
+    #             or_conditions = []
+    #             if company_name:
+    #                 or_conditions.append(('partner_name', '=', company_name))
+    #             if phone:
+    #                 or_conditions.append(('phone', '=', phone))
+    #             if or_conditions:
+    #                 if len(or_conditions) > 1:
+    #                     domain.insert(0, '|')
+    #                 domain.extend(or_conditions)
+    #             domain.append(('id', '!=', record.id))
+    #             duplicate_leads = self.search(domain, limit=1)
+    #
+                # if duplicate_leads:
+                #     error_msg = _("A lead already exists with: ")
+                #     duplicate_info = []
+                #
+                #     if company_name and duplicate_leads.partner_name == company_name:
+                #         duplicate_info.append(_("Company Name: %s") % company_name)
+                #     if phone and duplicate_leads.phone == phone:
+                #         duplicate_info.append(_("Phone: %s") % phone)
+                #
+                #     error_msg += " or ".join(duplicate_info)
+                #     error_msg += _(" (Lead: %s)") % duplicate_leads.name
+                #
+                #     raise ValidationError(error_msg)
+
+    @api.onchange('partner_name', 'phone', 'website')
+    def onc_check_duplicate_lead(self):
+        for r in self:
+            company_name = r.partner_name
+            phone = r.phone
+            website = r.website
+            if company_name or phone or website:
                 domain = ['|', ('active', '=', True), ('active', '=', False)]
                 or_conditions = []
                 if company_name:
                     or_conditions.append(('partner_name', '=', company_name))
                 if phone:
                     or_conditions.append(('phone', '=', phone))
+                if website:
+                    or_conditions.append(('website', '=', website))
                 if or_conditions:
                     if len(or_conditions) > 1:
                         domain.insert(0, '|')
                     domain.extend(or_conditions)
-                domain.append(('id', '!=', record.id))
+                domain.append(('id', '!=', r.id))
                 duplicate_leads = self.search(domain, limit=1)
-
                 if duplicate_leads:
-                    error_msg = _("A lead already exists with: ")
+                    error_msg = _("Đã tồn tại lead tương tự: ")
                     duplicate_info = []
 
                     if company_name and duplicate_leads.partner_name == company_name:
                         duplicate_info.append(_("Company Name: %s") % company_name)
                     if phone and duplicate_leads.phone == phone:
                         duplicate_info.append(_("Phone: %s") % phone)
+                    if website and duplicate_leads.website == website:
+                        duplicate_info.append(_("website: %s") % website)
 
                     error_msg += " or ".join(duplicate_info)
                     error_msg += _(" (Lead: %s)") % duplicate_leads.name
 
-                    raise ValidationError(error_msg)
+                    return {
+                        'warning': {
+                            'title': _("Cảnh báo trùng lặp!"),
+                            'message': _(error_msg),
+                            'type': 'notification',
+                        }
+                    }
+
+
+
+
 
     def unassign_expired_opportunities(self):
         """Cron job chạy hàng ngày để bỏ gán sale person"""
@@ -79,3 +126,11 @@ class CrmLead(models.Model):
     @api.model
     def _get_default_lead_code(self):
         return self.env['ir.sequence'].next_by_code('crm.lead.code') or '/'
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        if self.env.context.get('import_file'):
+            for values in vals_list:
+                if 'user_id' not in values or values.get('user_id') == False:
+                    values['user_id'] = self.env.user.id
+        return super().create(vals_list)

@@ -94,6 +94,7 @@
                     <field name="x_dntt"/>
                     <field name="x_check_bank_fees"/>
                     <field name="x_commission"/>
+                    <field name="source_id" position="move" required="1"/>
                 </xpath>
 
 
