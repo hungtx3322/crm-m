@@ -9,9 +9,9 @@
                 <list position="attributes">
                     <attribute name="decoration-danger">x_has_overdue_payment == True</attribute>
                 </list>
-                <xpath expr="//field[@name='name']" position="after">
-                    <field name="x_has_overdue_payment" invisible="1"/>
-                </xpath>
+                <!--                <xpath expr="//field[@name='name']" position="after">-->
+                <!--                    <field name="x_has_overdue_payment" invisible="1"/>-->
+                <!--                </xpath>-->
 
                 <xpath expr="//field[@name='name']" position="after">
                     <field name="x_so_name" optional="hide"/>
@@ -26,7 +26,7 @@
                     <field name="x_commission" optional="hide"/>
                     <field name="x_dntt" optional="hide"/>
                     <field name="x_moq" optional="hide"/>
-                    <field name="x_sl_moq" optional="hide"/>
+                    <field name="x_qty_with_uom" optional="hide"/>
                     <field name="x_time_deliver" optional="hide"/>
                     <field name="x_local_deliver" optional="hide"/>
                     <field name="x_expen_diliver" optional="hide"/>
@@ -127,6 +127,10 @@
                     <field name="x_description" string="Mô tả" widget="sol_text" optional="show"/>
                 </xpath>
             </field>
+        </record>
+
+        <record id="sale.act_res_partner_2_sale_order" model="ir.actions.act_window">
+            <field name="domain">[('partner_id', 'child_of', active_ids), ('state', '=', 'sale')]</field>
         </record>
 
     </data>

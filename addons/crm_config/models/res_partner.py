@@ -55,3 +55,9 @@ class ResPartner(models.Model):
                 if 'user_id' not in values or values.get('user_id') == False:
                     values['user_id'] = self.env.user.id
         return super().create(vals_list)
+
+
+    def _get_sale_order_domain_count(self):
+        domain = super(ResPartner, self)._get_sale_order_domain_count()
+        domain.append(('state', '=', 'sale'))
+        return domain

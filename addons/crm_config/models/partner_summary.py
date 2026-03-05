@@ -26,5 +26,10 @@ class PartnerSummary(models.Model):
                     FROM res_users u 
                     WHERE u.partner_id = p.id
                 )
+                AND EXISTS (
+                    SELECT 1 
+                    FROM sale_order s 
+                    WHERE s.partner_id = p.id
+                )
             )
         """ % self._table)

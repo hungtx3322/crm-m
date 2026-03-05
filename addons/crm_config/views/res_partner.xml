@@ -10,7 +10,7 @@
 
                 <xpath expr="//notebook/page[@name='internal_notes']" position="after">
                     <page string="Lịch sử đơn hàng">
-                        <field name="x_so_line">
+                        <field name="x_so_line" domain="[('state', '=', 'sale')]">
                             <list redonly="1">
                                 <field name="x_name_so"/>
                                 <field name="x_quotation_date"/>
